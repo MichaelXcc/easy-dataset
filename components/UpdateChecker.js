@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Box, Button, Snackbar, Alert, Typography, Link, CircularProgress, LinearProgress } from '@mui/material';
+import { Box, Button, Snackbar, Alert, Typography, Link, CircularProgress, LinearProgress, Tooltip, IconButton } from '@mui/material';
 import UpdateIcon from '@mui/icons-material/Update';
 import { useTranslation } from 'react-i18next';
 
@@ -151,9 +151,26 @@ const UpdateChecker = () => {
   return (
     <>
       {updateAvailable && (
-        <Button color="primary" startIcon={<UpdateIcon />} onClick={() => setOpen(true)} sx={{ ml: 1 }}>
-          {t('update.newVersion')}
-        </Button>
+        <Tooltip title={t('update.newVersion')}>
+          <IconButton
+            onClick={() => setOpen(true)}
+            size="small"
+            sx={{
+              bgcolor: 'background.default',
+              color: 'text.secondary',
+              p: 1, 
+              borderRadius: '0.5rem',
+              '&:hover': {
+                bgcolor: 'state.base.hover',
+                color: 'text.primary'
+              },
+              width: '2rem',
+              height: '2rem'
+            }}
+          >
+            <UpdateIcon fontSize="small" />
+          </IconButton>
+        </Tooltip>
       )}
 
       <Snackbar
@@ -162,16 +179,25 @@ const UpdateChecker = () => {
         onClose={handleClose}
         anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
       >
-        <Alert onClose={handleClose} severity="info" sx={{ width: '100%', maxWidth: 400 }}>
+        <Alert 
+          onClose={handleClose} 
+          severity="info" 
+          sx={{ 
+            width: '100%', 
+            maxWidth: 400,
+            borderRadius: '0.75rem',
+            boxShadow: 'var(--color-shadow-shadow-3)'
+          }}
+        >
           <Box sx={{ p: 1 }}>
-            <Typography variant="h6">{t('update.newVersionAvailable')}</Typography>
+            <Typography variant="h6" sx={{ fontWeight: 500 }}>{t('update.newVersionAvailable')}</Typography>
 
             {updateInfo && (
               <>
-                <Typography variant="body2" sx={{ mt: 1 }}>
+                <Typography variant="body2" sx={{ mt: 1, color: 'text.secondary' }}>
                   {t('update.currentVersion')}: {updateInfo.currentVersion}
                 </Typography>
-                <Typography variant="body2">
+                <Typography variant="body2" sx={{ color: 'text.secondary' }}>
                   {t('update.latestVersion')}: {updateInfo.version}
                 </Typography>
               </>
@@ -180,7 +206,7 @@ const UpdateChecker = () => {
             {checking && (
               <Box sx={{ display: 'flex', alignItems: 'center', mt: 1 }}>
                 <CircularProgress size={16} sx={{ mr: 1 }} />
-                <Typography variant="body2">{t('update.checking')}</Typography>
+                <Typography variant="body2" sx={{ color: 'text.secondary' }}>{t('update.checking')}</Typography>
               </Box>
             )}
 
@@ -192,36 +218,44 @@ const UpdateChecker = () => {
 
             {downloading && (
               <Box sx={{ mt: 2, width: '100%' }}>
-                <Typography variant="body2" sx={{ mb: 0.5 }}>
+                <Typography variant="body2" sx={{ mb: 0.5, color: 'text.secondary' }}>
                   {t('update.downloading')}: {Math.round(downloadProgress)}%
                 </Typography>
-                <LinearProgress variant="determinate" value={downloadProgress} />
+                <LinearProgress 
+                  variant="determinate" 
+                  value={downloadProgress} 
+                  sx={{
+                    height: 4,
+                    borderRadius: 2,
+                    backgroundColor: 'background.neutral.subtle',
+                    '& .MuiLinearProgress-bar': {
+                      borderRadius: 2,
+                    }
+                  }}
+                />
               </Box>
             )}
 
             <Box sx={{ mt: 2, display: 'flex', gap: 2 }}>
-              {/* {!downloading && !updateDownloaded ? (
-                <Button
-                  variant="contained"
-                  color="primary"
-                  disabled={checking || downloading}
-                  onClick={downloadUpdate}
-                >
-                  {t('update.downloadNow')}
-                </Button>
-              ) : updateDownloaded ? (
-                <Button
-                  variant="contained"
-                  color="primary"
-                  onClick={installUpdate}
-                >
-                  {t('update.installNow')}
-                </Button>
-              ) : null} */}
-
               {updateInfo?.releaseUrl && (
-                <Link href={updateInfo.releaseUrl} target="_blank" rel="noopener noreferrer">
-                  <Button variant="outlined">{t('update.viewRelease')}</Button>
+                <Link 
+                  href={updateInfo.releaseUrl} 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  style={{ textDecoration: 'none' }}
+                >
+                  <Button 
+                    variant="outlined"
+                    sx={{
+                      borderRadius: '0.5rem',
+                      textTransform: 'none',
+                      fontWeight: 500,
+                      py: 0.75,
+                      border: '1px solid var(--color-border-primary)'
+                    }}
+                  >
+                    {t('update.viewRelease')}
+                  </Button>
                 </Link>
               )}
             </Box>

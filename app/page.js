@@ -46,9 +46,13 @@ export default function Home() {
 
   return (
     <main style={{ overflow: 'hidden', position: 'relative' }}>
-      <Navbar projects={projects} models={[]} />
+      <Navbar 
+        projects={projects} 
+        models={[]} 
+        onCreateProject={() => setCreateDialogOpen(true)} 
+      />
 
-      <HeroSection onCreateProject={() => setCreateDialogOpen(true)} />
+      {/* <HeroSection onCreateProject={() => setCreateDialogOpen(true)} /> */}
 
       <Container
         maxWidth="lg"

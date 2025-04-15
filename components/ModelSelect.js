@@ -39,26 +39,37 @@ export default function ModelSelect({ models = [], selectedModel, onChange, size
         displayEmpty
         variant="outlined"
         sx={{
-          bgcolor: theme.palette.mode === 'dark' ? 'rgba(255, 255, 255, 0.05)' : 'rgba(255, 255, 255, 0.15)',
-          color: theme.palette.mode === 'dark' ? 'inherit' : 'white',
-          borderRadius: '8px',
+          bgcolor: 'background.default',
+          color: 'text.primary',
+          borderRadius: '0.5rem',
+          height: '2rem',
           '& .MuiSelect-icon': {
-            color: theme.palette.mode === 'dark' ? 'inherit' : 'white'
+            color: 'text.secondary'
           },
           '& .MuiOutlinedInput-notchedOutline': {
-            borderColor: 'transparent'
+            borderColor: 'divider'
           },
           '&:hover .MuiOutlinedInput-notchedOutline': {
-            borderColor: 'transparent'
+            borderColor: 'divider'
           },
           '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
-            borderColor: 'primary.main'
+            borderColor: 'primary.main',
+            borderWidth: '1px'
+          },
+          '& .MuiSelect-select': {
+            paddingTop: '0.25rem',
+            paddingBottom: '0.25rem',
+            fontSize: '0.875rem'
           }
         }}
         MenuProps={{
           PaperProps: {
             elevation: 2,
-            sx: { mt: 1, borderRadius: 2 }
+            sx: { 
+              mt: 1, 
+              borderRadius: 1,
+              boxShadow: 'var(--color-shadow-shadow-3)'
+            }
           }
         }}
       >
@@ -74,7 +85,23 @@ export default function ModelSelect({ models = [], selectedModel, onChange, size
             }
           })
           .map(model => (
-            <MenuItem key={model.id} value={model.id}>
+            <MenuItem 
+              key={model.id} 
+              value={model.id}
+              sx={{
+                fontSize: '0.875rem',
+                py: 1,
+                '&:hover': {
+                  bgcolor: 'state.base.hover'
+                },
+                '&.Mui-selected': {
+                  bgcolor: 'state.base.active',
+                  '&:hover': {
+                    bgcolor: 'state.base.active-hover'
+                  }
+                }
+              }}
+            >
               {model.provider}: {model.name}
             </MenuItem>
           ))}

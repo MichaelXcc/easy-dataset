@@ -15,7 +15,8 @@ import {
   useTheme as useMuiTheme,
   Tooltip,
   Avatar,
-  Chip
+  Chip,
+  Button
 } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 import ModelSelect from './ModelSelect';
@@ -31,8 +32,10 @@ import DarkModeOutlinedIcon from '@mui/icons-material/DarkModeOutlined';
 import DataObjectIcon from '@mui/icons-material/DataObject';
 import StorageIcon from '@mui/icons-material/Storage';
 import GitHubIcon from '@mui/icons-material/GitHub';
+import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
+import SearchIcon from '@mui/icons-material/Search';
 
-export default function Navbar({ projects = [], currentProject, models = [] }) {
+export default function Navbar({ projects = [], currentProject, models = [], onCreateProject }) {
   const [selectedProject, setSelectedProject] = useState(currentProject || '');
   const { t } = useTranslation();
   const [selectedModel, setSelectedModel] = useState(() => {
@@ -75,126 +78,143 @@ export default function Navbar({ projects = [], currentProject, models = [] }) {
     <AppBar
       position="static"
       elevation={0}
-      color={theme.palette.mode === 'dark' ? 'transparent' : 'primary'}
       sx={{
         borderBottom: `1px solid ${theme.palette.divider}`,
-        bgcolor: theme.palette.mode === 'dark' ? 'background.paper' : 'primary.main'
+        bgcolor: 'transparent',
+        boxShadow: 'none'
       }}
-      style={{ borderRadius: 0, zIndex: 99000 }}
     >
-      <Toolbar sx={{ minHeight: '64px' }} style={{ zIndex: 99000 }}>
+      <Toolbar
+        sx={{
+          display: 'flex',
+          height: '64px',
+          px: 4,
+          justifyContent: 'space-between'
+        }}
+      >
         {/* 左侧Logo和项目选择 */}
-        <Box sx={{ display: 'flex', alignItems: 'center', flexGrow: 0 }}>
+        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
           <Box
             sx={{
               display: 'flex',
               alignItems: 'center',
-              mr: 2,
-              '&:hover': { opacity: 0.9 }
+              gap: 1.5
             }}
-            style={{ cursor: 'pointer', '&:hover': { opacity: 0.9 } }}
-            onClick={() => {
-              window.location.href = '/';
-            }}
+            component={Link}
+            href="/"
           >
             <Box
-              component="img"
-              src="/imgs/logo.svg"
-              alt="Easy Dataset Logo"
-              sx={{
-                width: 28,
-                height: 28,
-                mr: 1.5
-              }}
+              // component="img"
+              // src="/imgs/logo.svg"
+              // alt="Easy Dataset Logo"
+              // sx={{
+              //   width: 28,
+              //   height: 28
+              // }}
             />
             <Typography
               variant="h6"
               component="div"
               sx={{
                 fontWeight: 600,
-                letterSpacing: '-0.5px'
+                fontSize: '1rem',
+                letterSpacing: '-0.3px',
+                color: 'text.primary'
               }}
-              style={{ fontSize: '1.1rem' }}
-              className={theme.palette.mode === 'dark' ? 'gradient-text' : ''}
-              color={theme.palette.mode === 'dark' ? 'inherit' : 'white'}
             >
-              Easy DataSet
+              X-Studio DataSet
             </Typography>
           </Box>
 
           {isProjectDetail && (
-            <FormControl size="small" sx={{ minWidth: 160 }}>
-              <Select
-                value={selectedProject}
-                onChange={handleProjectChange}
-                displayEmpty
-                variant="outlined"
-                sx={{
-                  bgcolor: theme.palette.mode === 'dark' ? 'rgba(255, 255, 255, 0.05)' : 'rgba(255, 255, 255, 0.15)',
-                  borderRadius: '8px',
-                  color: theme.palette.mode === 'dark' ? 'inherit' : 'white',
-                  '& .MuiSelect-icon': {
-                    color: theme.palette.mode === 'dark' ? 'inherit' : 'white'
-                  },
-                  '& .MuiOutlinedInput-notchedOutline': {
-                    borderColor: 'transparent'
-                  },
-                  '&:hover .MuiOutlinedInput-notchedOutline': {
-                    borderColor: 'transparent'
-                  },
-                  '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
-                    borderColor: 'primary.main'
-                  }
-                }}
-                MenuProps={{
-                  PaperProps: {
-                    elevation: 2,
-                    sx: { mt: 1, borderRadius: 2 }
-                  }
-                }}
-              >
-                <MenuItem value="" disabled>
-                  {t('projects.selectProject')}
-                </MenuItem>
-                {projects.map(project => (
-                  <MenuItem key={project.id} value={project.id}>
-                    {project.name}
+            <>
+              <Box sx={{ color: 'text.tertiary', fontWeight: 'light' }}>/</Box>
+              <FormControl size="small" sx={{ minWidth: 160 }}>
+                <Select
+                  value={selectedProject}
+                  onChange={handleProjectChange}
+                  displayEmpty
+                  variant="outlined"
+                  sx={{
+                    bgcolor: 'background.default',
+                    borderRadius: '0.5rem',
+                    border: 'none',
+                    color: 'text.primary',
+                    '& .MuiSelect-icon': {
+                      color: 'text.secondary'
+                    },
+                    '& .MuiOutlinedInput-notchedOutline': {
+                      borderColor: 'divider'
+                    },
+                    '&:hover .MuiOutlinedInput-notchedOutline': {
+                      borderColor: 'divider'
+                    },
+                    '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
+                      borderColor: 'primary.main',
+                      borderWidth: '1px'
+                    },
+                    height: '2rem'
+                  }}
+                  MenuProps={{
+                    PaperProps: {
+                      elevation: 2,
+                      sx: { mt: 1, borderRadius: 1 }
+                    }
+                  }}
+                >
+                  <MenuItem value="" disabled>
+                    {t('projects.selectProject')}
                   </MenuItem>
-                ))}
-              </Select>
-            </FormControl>
+                  {projects.map(project => (
+                    <MenuItem key={project.id} value={project.id}>
+                      {project.name}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
+            </>
           )}
         </Box>
 
         {/* 中间的功能模块导航 */}
         {isProjectDetail && (
           <Box
-            sx={{ flexGrow: 1, display: 'flex', justifyContent: 'center' }}
-            style={{ position: 'absolute', left: '400px' }}
+            sx={{
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center'
+            }}
           >
             <Tabs
               value={pathname}
               textColor="inherit"
-              indicatorColor="secondary"
+              TabIndicatorProps={{
+                style: {
+                  height: '2px',
+                  borderRadius: '1px'
+                }
+              }}
               sx={{
                 '& .MuiTab-root': {
-                  minWidth: 100,
-                  fontSize: '0.9rem',
+                  minWidth: 'auto',
+                  padding: '0.5rem 1rem',
+                  fontSize: '0.875rem',
                   transition: 'all 0.2s',
-                  color: theme.palette.mode === 'dark' ? 'inherit' : 'white',
-                  opacity: theme.palette.mode === 'dark' ? 0.7 : 0.8,
+                  color: 'text.secondary',
+                  minHeight: '2rem',
+                  marginX: '0.25rem',
+                  borderRadius: '0.5rem',
                   '&:hover': {
-                    color: theme.palette.mode === 'dark' ? theme.palette.secondary.main : 'white',
-                    opacity: 1
+                    color: 'text.primary',
+                    bgcolor: 'state.base.hover'
                   }
                 },
                 '& .Mui-selected': {
-                  color: theme.palette.mode === 'dark' ? theme.palette.secondary.main : 'white',
-                  opacity: 1,
-                  fontWeight: 600
+                  color: 'text.primary',
+                  fontWeight: 500
                 },
                 '& .MuiTabs-indicator': {
-                  backgroundColor: theme.palette.mode === 'dark' ? theme.palette.secondary.main : 'white'
+                  backgroundColor: 'primary.main'
                 }
               }}
             >
@@ -234,51 +254,115 @@ export default function Navbar({ projects = [], currentProject, models = [] }) {
 
         {/* 右侧操作区 */}
         <Box
-          sx={{ display: 'flex', flexGrow: 0, alignItems: 'center', gap: 2 }}
-          style={{ position: 'absolute', right: '20px' }}
+          sx={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: 2
+          }}
         >
+          {/* 创建项目按钮 */}
+          <Button
+            variant="text"
+            size="small"
+            onClick={onCreateProject}
+            startIcon={<AddCircleOutlineIcon />}
+            sx={{
+              display: 'flex',
+              alignItems: 'center',
+              position: 'relative',
+              mr: 1,
+              px: 1.5,
+              height: '32px',
+              borderRadius: '12px',
+              fontWeight: 500,
+              fontSize: '0.875rem',
+              cursor: 'pointer',
+              color: 'text.primary',
+              bgcolor: 'transparent',
+              '&:hover': {
+                bgcolor: 'rgba(0, 0, 0, 0.04)'
+              }
+            }}
+          >
+            {t('home.createProject')}
+          </Button>
+
+          {/* 搜索公开数据集按钮 */}
+          <Button
+            variant="text"
+            size="small"
+            onClick={() => {
+              window.location.href = '/dataset-square';
+            }}
+            startIcon={<SearchIcon />}
+            sx={{
+              display: 'flex',
+              alignItems: 'center',
+              position: 'relative',
+              mr: 1,
+              px: 1.5,
+              height: '32px',
+              borderRadius: '12px',
+              fontWeight: 500,
+              fontSize: '0.875rem',
+              cursor: 'pointer',
+              color: 'text.primary',
+              bgcolor: 'transparent',
+              '&:hover': {
+                bgcolor: 'rgba(0, 0, 0, 0.04)'
+              }
+            }}
+          >
+            {t('home.searchDataset')}
+          </Button>
+
           {/* 模型选择 */}
-          {location.pathname.includes('/projects/') && (
+          {pathname.includes('/projects/') && (
             <ModelSelect models={models} selectedModel={selectedModel} onChange={handleModelChange} />
           )}
 
-          {/* 数据集广场链接 - 改为图标按钮样式 */}
-          <Tooltip title={t('datasetSquare.title')}>
+          {/* 数据集广场链接 */}
+          {/* <Tooltip title={t('datasetSquare.title')}>
             <IconButton
               component={Link}
               href="/dataset-square"
               size="small"
               sx={{
-                bgcolor: theme.palette.mode === 'dark' ? 'rgba(255, 255, 255, 0.05)' : 'rgba(255, 255, 255, 0.15)',
-                color: theme.palette.mode === 'dark' ? 'inherit' : 'white',
+                bgcolor: 'background.default',
+                color: 'text.secondary',
                 p: 1,
-                borderRadius: 1.5,
+                borderRadius: '0.5rem',
                 '&:hover': {
-                  bgcolor: theme.palette.mode === 'dark' ? 'rgba(255, 255, 255, 0.1)' : 'rgba(255, 255, 255, 0.25)'
-                }
+                  bgcolor: 'state.base.hover',
+                  color: 'text.primary'
+                },
+                width: '2rem',
+                height: '2rem'
               }}
-              style={{ right: '-15px' }}
             >
               <StorageIcon fontSize="small" />
             </IconButton>
-          </Tooltip>
+          </Tooltip> */}
+          
           {/* 语言切换器 */}
-          <Box sx={{ display: 'flex', alignItems: 'center', ml: 2 }}>
-            <LanguageSwitcher />
-          </Box>
+          {/* <LanguageSwitcher /> */}
+          
           {/* 主题切换按钮 */}
-          <Tooltip title={resolvedTheme === 'dark' ? t('theme.switchToLight') : t('theme.switchToDark')}>
+          {/* <Tooltip title={resolvedTheme === 'dark' ? t('theme.switchToLight') : t('theme.switchToDark')}>
             <IconButton
               onClick={toggleTheme}
               size="small"
               sx={{
-                bgcolor: theme.palette.mode === 'dark' ? 'rgba(255, 255, 255, 0.05)' : 'rgba(255, 255, 255, 0.15)',
-                color: theme.palette.mode === 'dark' ? 'inherit' : 'white',
+                bgcolor: 'background.default',
+                color: 'text.secondary',
                 p: 1,
-                borderRadius: 1.5,
+                borderRadius: '0.5rem',
                 '&:hover': {
-                  bgcolor: theme.palette.mode === 'dark' ? 'rgba(255, 255, 255, 0.1)' : 'rgba(255, 255, 255, 0.25)'
-                }
+                  bgcolor: 'state.base.hover',
+                  color: 'text.primary'
+                },
+                width: '2rem',
+                height: '2rem'
               }}
             >
               {resolvedTheme === 'dark' ? (
@@ -287,26 +371,29 @@ export default function Navbar({ projects = [], currentProject, models = [] }) {
                 <DarkModeOutlinedIcon fontSize="small" />
               )}
             </IconButton>
-          </Tooltip>
+          </Tooltip> */}
 
           {/* GitHub链接 */}
-          <Tooltip title={t('common.visitGitHub')}>
+          {/* <Tooltip title={t('common.visitGitHub')}>
             <IconButton
               onClick={() => window.open('https://github.com/ConardLi/easy-dataset', '_blank')}
               size="small"
               sx={{
-                bgcolor: theme.palette.mode === 'dark' ? 'rgba(255, 255, 255, 0.05)' : 'rgba(255, 255, 255, 0.15)',
-                color: theme.palette.mode === 'dark' ? 'inherit' : 'white',
+                bgcolor: 'background.default',
+                color: 'text.secondary',
                 p: 1,
-                borderRadius: 1.5,
+                borderRadius: '0.5rem',
                 '&:hover': {
-                  bgcolor: theme.palette.mode === 'dark' ? 'rgba(255, 255, 255, 0.1)' : 'rgba(255, 255, 255, 0.25)'
-                }
+                  bgcolor: 'state.base.hover',
+                  color: 'text.primary'
+                },
+                width: '2rem',
+                height: '2rem'
               }}
             >
               <GitHubIcon fontSize="small" />
             </IconButton>
-          </Tooltip>
+          </Tooltip> */}
 
           {/* 更新检查器 */}
           <UpdateChecker />

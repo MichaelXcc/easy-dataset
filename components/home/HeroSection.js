@@ -15,9 +15,16 @@ export default function HeroSection({ onCreateProject }) {
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
   return (
-    <Box sx={{ ...styles.heroSection, ...styles.heroBackground(theme) }}>
+    <Box sx={{ 
+      pt: { xs: 6, md: 10 },
+      pb: { xs: 6, md: 8 },
+      position: 'relative',
+      overflow: 'hidden',
+      transition: 'all 0.3s ease-in-out',
+      background: 'transparent'
+    }}>
       {/* 添加粒子背景 */}
-      <ParticleBackground />
+      {/* <ParticleBackground /> */}
 
       <Box sx={styles.decorativeCircle} />
       <Box sx={styles.decorativeCircleSecond} />
@@ -40,10 +47,10 @@ export default function HeroSection({ onCreateProject }) {
             component="h1"
             fontWeight="bold"
             sx={{
-              ...styles.gradientTitle(theme),
+              color: 'text.primary',
               letterSpacing: '-1px',
               mb: 3,
-              textShadow: theme.palette.mode === 'dark' ? '0 0 30px rgba(139, 92, 246, 0.3)' : 'none'
+              textShadow: 'none'
             }}
           >
             {t('home.title')}
@@ -89,16 +96,17 @@ export default function HeroSection({ onCreateProject }) {
               onClick={onCreateProject}
               startIcon={<AddCircleOutlineIcon />}
               sx={{
-                ...styles.createButton(theme),
                 fontWeight: 600,
                 transition: 'all 0.3s ease',
                 transform: 'translateY(0)',
                 px: 4,
                 py: 1.5,
-                borderRadius: '12px',
+                borderRadius: '8px',
+                bgcolor: 'primary.main',
                 '&:hover': {
-                  transform: 'translateY(-3px)',
-                  boxShadow: '0 10px 25px rgba(0, 0, 0, 0.2)'
+                  bgcolor: 'primary.dark',
+                  transform: 'translateY(-2px)',
+                  boxShadow: '0 5px 15px rgba(0, 0, 0, 0.1)'
                 }
               }}
             >
@@ -112,16 +120,17 @@ export default function HeroSection({ onCreateProject }) {
               }}
               startIcon={<SearchIcon />}
               sx={{
-                ...styles.createButton(theme),
                 fontWeight: 600,
                 transition: 'all 0.3s ease',
                 transform: 'translateY(0)',
                 px: 4,
                 py: 1.5,
-                borderRadius: '12px',
+                borderRadius: '8px',
+                bgcolor: 'primary.main',
                 '&:hover': {
-                  transform: 'translateY(-3px)',
-                  boxShadow: '0 10px 25px rgba(0, 0, 0, 0.2)'
+                  bgcolor: 'primary.dark',
+                  transform: 'translateY(-2px)',
+                  boxShadow: '0 5px 15px rgba(0, 0, 0, 0.1)'
                 }
               }}
             >

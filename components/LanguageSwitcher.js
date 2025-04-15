@@ -18,16 +18,19 @@ export default function LanguageSwitcher() {
         onClick={toggleLanguage}
         size="small"
         sx={{
-          bgcolor: theme.palette.mode === 'dark' ? 'rgba(255, 255, 255, 0.05)' : 'rgba(255, 255, 255, 0.15)',
-          color: theme.palette.mode === 'dark' ? 'inherit' : 'white',
+          bgcolor: 'background.default',
+          color: 'text.secondary',
           p: 1,
-          borderRadius: 1.5,
+          borderRadius: '0.5rem',
           '&:hover': {
-            bgcolor: theme.palette.mode === 'dark' ? 'rgba(255, 255, 255, 0.1)' : 'rgba(255, 255, 255, 0.25)'
-          }
+            bgcolor: 'state.base.hover',
+            color: 'text.primary'
+          },
+          width: '2rem',
+          height: '2rem'
         }}
       >
-        <Typography variant="body2" fontWeight="medium">
+        <Typography variant="body2" fontWeight="medium" sx={{ fontSize: '0.75rem' }}>
           {i18n.language === 'zh-CN' ? 'EN' : '中'}
         </Typography>
       </IconButton>
